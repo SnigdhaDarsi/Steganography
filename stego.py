@@ -23,14 +23,13 @@ def showimage():
     lbl.image=img
 
 def hide_message_in_plane(plane, message):
+    # Flatten the 2D plane into a 1D array
+    flat_plane = plane.flatten()
+    #to know how long the message is for decoding, the first byte of the plane will be the message length
+    flat_plane[0] = len(message)
     #convert message to binary
     message = ''.join([format(ord(char), '08b') for char in message])
     
-    # Flatten the 2D plane into a 1D array
-    flat_plane = plane.flatten()
-    
-    #to know how long the message is for decoding, the first byte of the plane will be the message length
-    flat_plane[0] = len(message)
     # Replace the LSB of each pixel with a bit from the message
     for i in range(len(message)):
         flat_plane[i+1] = (flat_plane[i+1] & ~1) | int(message[i]) # Set LSB to message[i]
@@ -45,8 +44,9 @@ def get_message_in_plane(plane):
     # Initialize an empty list to store the binary bits of the message
     binary_message = []
 
+    message_len = flat_plane[0] *8
     # Extract LSBs from the flattened plane to form the binary message
-    for i in range(1, flat_plane[0]+1):  # As message length is stored in the first pixel, we use this to determine how many pixels to read
+    for i in range(1, message_len+1):  # As message length is stored in the first pixel, we use this to determine how many pixels to read
         # Extract LSB using bitwise AND operation
         binary_message.append(str(flat_plane[i] & 1))  # Extract the LSB and convert to string
     
@@ -67,14 +67,14 @@ def Hide():
 
     # Convert the RGB image to BGR format (because OpenCV uses BGR by default)
     img_cv = cv2.cvtColor(img_np, cv2.COLOR_RGB2BGR)
-    # splits the imag into its individual colour channels where b,g and r are 2d arrays
+    # splits the image into its individual colour channels where b,g and r are 2d arrays
     b,g,r = cv2.split(img_cv)
      # Replace the LSBs in the blue channel with the binary message
     new_b = hide_message_in_plane(b, message)
     
     # Reconstruct the image with the modified blue channel
     img_with_message = cv2.merge([new_b, g, r])
-    cv2.imwrite("stego_image.png", img_with_message)
+    cv2.imwrite(filename+ "hidden.png", img_with_message)
 def Show():
     # Convert PIL image to a NumPy array (in RGB format)
     img_np = np.array(img_pil)
