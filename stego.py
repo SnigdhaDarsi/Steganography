@@ -74,7 +74,7 @@ def Hide():
     
     # Reconstruct the image with the modified blue channel
     img_with_message = cv2.merge([new_b, g, r])
-    cv2.imwrite(filename+ "hidden.png", img_with_message)
+    cv2.imwrite(filename[:len(filename)-3]+ "hidden.png", img_with_message)
 def Show():
     # Convert PIL image to a NumPy array (in RGB format)
     img_np = np.array(img_pil)
