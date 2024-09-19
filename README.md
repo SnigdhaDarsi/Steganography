@@ -44,13 +44,3 @@ pip install pillow opencv-python
 - When extracting, it reads the LSBs of the blue channel to reconstruct the hidden message.
 
 
-
-
-
-## License
-
-This project is licensed under the MIT License.
-
----
-
-Feel free to update the **GUI Preview** section with a screenshot of your tool. If you don't have a screenshot yet, you can add one later by uploading an image to the GitHub repository.
